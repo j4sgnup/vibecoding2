@@ -1,0 +1,35 @@
+{
+  "name": "acm-poc-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/src/index.js",
+    "build": "npx tsc",
+    "prebuild": "rm -rf dist",
+    "dev": "NODE_TLS_REJECT_UNAUTHORIZED=0 nodemon src/index.ts",
+    "seed": "ts-node scripts/seed-all.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@langchain/core": "^0.2.36",
+    "@langchain/google-genai": "^0.0.22",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "langchain": "^0.2.20",
+    "mongoose": "^8.17.0",
+    "node-fetch": "^3.3.2",
+    "twilio": "^5.8.0",
+    "@faker-js/faker": "^9.9.0",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.1.0",
+    "ts-node": "^10.9.2"
+  }
+}

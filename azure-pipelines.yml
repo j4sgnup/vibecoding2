@@ -1,0 +1,100 @@
+# Azure DevOps Pipeline for React + Node.js App
+# Builds frontend, copies to backend, and deploys to Azure App Service
+
+trigger:
+- master
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  # Azure App Service name
+  azureSubscription: 'Azure-AppService-Connection' # Update with your actual service connection name
+  appName: 'CTS-VibeAppea3411-3'
+  
+  # Node.js version
+  nodeVersion: '20.x'
+
+stages:
+- stage: Build
+  displayName: 'Build Application'
+  jobs:
+  - job: BuildApp
+    displayName: 'Build Frontend and Backend'
+    steps:
+    
+    # Install Node.js
+    - task: NodeTool@0
+      inputs:
+        versionSpec: $(nodeVersion)
+      displayName: 'Install Node.js'
+    
+    # Install frontend dependencies
+    - script: |
+        cd $(Build.SourcesDirectory)
+        npm ci
+      displayName: 'Install Frontend Dependencies'
+    
+    # Build frontend
+    - script: |
+        cd $(Build.SourcesDirectory)
+        npm run build
+      displayName: 'Build Frontend'
+    
+    # Install backend dependencies
+    - script: |
+        cd $(Build.SourcesDirectory)/acm-poc-backend
+        npm ci
+      displayName: 'Install Backend Dependencies'
+    
+    # Copy frontend build to backend public folder
+    - script: |
+        mkdir -p $(Build.SourcesDirectory)/acm-poc-backend/public
+        cp -r $(Build.SourcesDirectory)/dist/* $(Build.SourcesDirectory)/acm-poc-backend/public/
+      displayName: 'Copy Frontend Build to Backend'
+    
+    # Build backend
+    - script: |
+        cd $(Build.SourcesDirectory)/acm-poc-backend
+        npm run build
+      displayName: 'Build Backend'
+    
+    # Create deployment package
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(Build.SourcesDirectory)/acm-poc-backend'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        replaceExistingArchive: true
+      displayName: 'Create Deployment Package'
+    
+    # Publish build artifacts
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+      displayName: 'Publish Artifacts'
+
+- stage: Deploy
+  displayName: 'Deploy to Azure'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: DeployApp
+    displayName: 'Deploy to App Service'
+    environment: 'production'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: $(azureSubscription)
+              appType: 'webAppLinux'
+              appName: $(appName)
+              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              runtimeStack: 'NODE|20-lts'
+            displayName: 'Deploy to Azure App Service'

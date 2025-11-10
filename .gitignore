@@ -1,0 +1,78 @@
+# Dependencies
+node_modules/
+acm-poc-backend/node_modules/
+acm-poc-frontend/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/*
+acm-poc-backend/.npm/*
+backend/.npm/*
+frontend/.npm/*
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+acm-poc-backend/.env
+
+# Build outputs
+dist/
+public/
+build/
+acm-poc-frontend/dist/
+acm-poc-backend/dist/
+
+# Lock files (optional - comment out if you want to track them)
+#package-lock.json
+yarn.lock
+#acm-poc-backend/package-lock.json
+#acm-poc-frontend/package-lock.json
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+.nyc_output
+
+# Certificates and keys
+*.pem
+*.key
+*.cert
+acm-poc-backend/zscaler.pem
+
+# Local deployment script
+deploy-local.sh
+
+# IDE and workspace files
+vibeCoding.code-workspace
+*.code-workspace
+
+# Temporary files
+.tmp/
+temp/
+*.tmp
+*.temp
+
+package-01.json

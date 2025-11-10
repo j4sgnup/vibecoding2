@@ -1,0 +1,6 @@
+echo "Setting up Azure App Service environment variables..."
+az webapp config appsettings set --resource-group $RESOURCE_GROUP --name $APP_NAME --settings TWILIO_ACCOUNT_SID=""
+az webapp config appsettings set --resource-group $RESOURCE_GROUP --name $APP_NAME --settings TWILIO_AUTH_TOKEN=""
+az webapp config appsettings set --resource-group $RESOURCE_GROUP --name $APP_NAME --settings TWILIO_PHONE_NUMBER=""
+echo "Environment variables set successfully!"
+echo "You can verify them in the Azure portal under Configuration > Application settings"
