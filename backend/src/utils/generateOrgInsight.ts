@@ -82,11 +82,20 @@ export async function generateOrgInsight(orgData: OrgInsightData): Promise<Gener
 Focus on opportunities for growth, engagement, or improvement. Keep it to one sentence. Do not include any XML tags like <think> in your response.`;
 
     try {
+      console.log(`[generateOrgInsight] Attempting to generate insight for org: ${name}`);
+      console.log(`[generateOrgInsight] Prompt length: ${prompt.length} characters`);
+      console.log(`[generateOrgInsight] AI enabled: ${isAiEnabled}`);
+      
       const response = await llm.invoke(prompt);
+      console.log(`[generateOrgInsight] Raw response:`, response);
+      
       // Clean the response to remove any XML-like thinking tags
       aiInsightResult = response.content.toString().replace(/<think>[\s\S]*?<\/think>/, '').trim();
+      console.log(`[generateOrgInsight] Final cleaned result: ${aiInsightResult}`);
     } catch (error) {
-      console.error("Failed to generate AI response, falling back to default insight:", error);
+      console.error("[generateOrgInsight] ERROR - Full error details:", error);
+      console.error("[generateOrgInsight] Error message:", error instanceof Error ? error.message : 'Unknown error');
+      console.error("[generateOrgInsight] Error stack:", error instanceof Error ? error.stack : 'No stack trace');
       aiInsightResult = `Unable to generate AI insight for ${name} at this time.`;
     }
   } else {

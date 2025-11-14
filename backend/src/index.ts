@@ -251,6 +251,98 @@ app.post('/api/invites/reminders', async (req, res) => {
   }
 });
 
+app.get('/api/test-ai', async (req, res) => {
+  try {
+    const { llm } = require('./utils/generateAIResponse');
+    const testResponse = await llm.invoke("Say hello in one sentence.");
+    console.log('AI Test Response:', testResponse);
+    res.json({ 
+      success: true, 
+      response: testResponse.content.toString(),
+      message: "AI is working correctly"
+    });
+  } catch (error: unknown) {
+    console.error('AI Test Error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Unknown error',
+      message: "AI test failed"
+    });
+  }
+});
+
+// Test the exact prompt that's failing in generateOrgInsight
+app.get('/api/test-org-prompt', async (req, res) => {
+  try {
+    const { llm } = require('./utils/generateAIResponse');
+    const testPrompt = `Generate a concise, actionable insight for the organization "Test Company" based on the following data:
+- Organization Type: parent
+- Services Enrolled: Cloud Storage, Data Analytics
+- Total Team Members: 5
+- Inactive Team Members (last login over 30 days ago): 2
+- No Intermediaries assigned.
+
+Focus on opportunities for growth, engagement, or improvement. Keep it to one sentence. Do not include any XML tags like <think> in your response.`;
+    
+    console.log('Testing org insight prompt...');
+    const response = await llm.invoke(testPrompt);
+    console.log('Org Test Response:', response);
+    res.json({ 
+      success: true, 
+      response: response.content.toString(),
+      prompt: testPrompt,
+      message: "Organization insight test successful"
+    });
+  } catch (error: unknown) {
+    console.error('Org Test Error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Unknown error',
+      message: "Organization insight test failed"
+    });
+  }
+});
+
+// Test endpoint for OpenAI
+app.get('/api/test-openai', async (req, res) => {
+  try {
+    const OpenAI = require('openai');
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+    
+    const completion = await openai.chat.completions.create({
+      messages: [{ role: "user", content: "Say hello in one sentence." }],
+      model: "gpt-3.5-turbo",
+      max_tokens: 50,
+    });
+    
+    res.json({ 
+      success: true, 
+      response: completion.choices[0].message.content,
+      message: "OpenAI test successful",
+      model: "gpt-3.5-turbo"
+    });
+  } catch (error: unknown) {
+    console.error('OpenAI Test Error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Unknown error',
+      message: "OpenAI test failed"
+    });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+// Changes for vercel deployment
+// if (process.env.NODE_ENV !== 'production') {
+//   const PORT = process.env.PORT || 3000;
+//   app.listen(PORT, () => {
+//     console.log(`Server running on port ${PORT}`);
+//   });
+// }
+
+// export default app;
