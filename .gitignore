@@ -26,7 +26,7 @@ acm-poc-frontend/dist/
 acm-poc-backend/dist/
 
 # Lock files (optional - comment out if you want to track them)
-#package-lock.json
+*/package-lock.json
 yarn.lock
 #acm-poc-backend/package-lock.json
 #acm-poc-frontend/package-lock.json

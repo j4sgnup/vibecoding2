@@ -290,7 +290,6 @@ Focus on opportunities for growth, engagement, or improvement. Keep it to one se
     res.json({ 
       success: true, 
       response: response.content.toString(),
-      prompt: testPrompt,
       message: "Organization insight test successful"
     });
   } catch (error: unknown) {
@@ -299,6 +298,32 @@ Focus on opportunities for growth, engagement, or improvement. Keep it to one se
       success: false, 
       error: error instanceof Error ? error.message : 'Unknown error',
       message: "Organization insight test failed"
+    });
+  }
+});
+
+app.get('/api/test-geminiai', async (req, res) => {
+  const aiModel = "gemini-2.5-flash"
+  try {
+    const { GoogleGenerativeAI } = require('@google/generative-ai');
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+
+    const model = genAI.getGenerativeModel({ model: aiModel });
+    const result = await model.generateContent("Say hello in one sentence.");
+    const responseText = result?.response?.text();
+
+    res.json({
+      success: true,
+      response: responseText,
+      message: "Gemini AI test successful",
+      model: aiModel
+    });
+  } catch (error: unknown) {
+    console.error('Gemini AI Test Error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      message: "Gemini AI test failed"
     });
   }
 });
