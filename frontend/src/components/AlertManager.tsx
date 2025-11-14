@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button, TextField, Box, CircularProgress } from '@mui/material';
+import { API_BASE } from '../utils/api';
 
 interface AlertManagerProps {
   organizationId: string;
@@ -17,7 +18,7 @@ const AlertManager: React.FC<AlertManagerProps> = ({ organizationId, action }) =
     const checkAlertStatus = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`/api/alerts/check?organizationId=${organizationId}&action=${action}`);
+        const response = await fetch(`${API_BASE}/api/alerts/check?organizationId=${organizationId}&action=${action}`);
         const data = await response.json();
         setAlertExists(data.exists);
         if (data.exists) {
@@ -35,7 +36,7 @@ const AlertManager: React.FC<AlertManagerProps> = ({ organizationId, action }) =
 
   const handleCreateAlert = async () => {
     try {
-      await fetch('/api/alerts', {
+      await fetch(`${API_BASE}/api/alerts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ organizationId, action, phoneNumber: `whatsapp:${phoneNumber}` }),
@@ -49,7 +50,7 @@ const AlertManager: React.FC<AlertManagerProps> = ({ organizationId, action }) =
 
   const handleRemoveAlert = async () => {
     try {
-      await fetch(`/api/alerts/${organizationId}/${action}`, {
+      await fetch(`${API_BASE}/api/alerts/${organizationId}/${action}`, {
         method: 'DELETE',
       });
       setAlertExists(false);

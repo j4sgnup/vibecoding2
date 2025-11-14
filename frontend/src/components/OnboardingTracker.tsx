@@ -6,6 +6,7 @@ import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { API_BASE } from '../utils/api';
 
 interface User {
   userId: string;
@@ -32,8 +33,7 @@ export default function OnboardingTracker({ orgId }: OnboardingTrackerProps) {
 
   useEffect(() => {
     if (orgId) {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
-      fetch(`${apiBaseUrl}/api/orgs/${orgId}/users`)
+      fetch(`${API_BASE}/api/orgs/${orgId}/users`)
         .then((res) => res.json())
         .then((data) => setUsers(data))
         .catch(console.error);

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Switch, FormControlLabel, CircularProgress, Snackbar, Alert, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { API_BASE } from '../utils/api';
 
 const SettingsPage: React.FC = () => {
   const [settings, setSettings] = useState({ isAiEnabled: true, isTwilioEnabled: true });
@@ -11,7 +12,7 @@ const SettingsPage: React.FC = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch('/api/settings');
+        const response = await fetch(`${API_BASE}/api/settings`);
         const data = await response.json();
         setSettings(data);
       } catch (error) {
@@ -30,7 +31,7 @@ const SettingsPage: React.FC = () => {
     setSettings(newSettings);
 
     try {
-      const response = await fetch('/api/settings', {
+      const response = await fetch(`${API_BASE}/api/settings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newSettings),

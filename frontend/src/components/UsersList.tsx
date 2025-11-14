@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { API_BASE } from '../utils/api';
 import {
   Box,
   Typography,
@@ -66,7 +67,7 @@ const UsersList: React.FC = () => {
 
   const fetchOrganizationDetails = async (orgId: string) => {
     try {
-      const response = await fetch(`/api/orgs/${orgId}`); // Use the new endpoint
+      const response = await fetch(`${API_BASE}/api/orgs/${orgId}`); // Use the new endpoint
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -74,7 +75,7 @@ const UsersList: React.FC = () => {
 
       let parentOrgName: string | undefined;
       if (org.parentOrgId) {
-        const parentResponse = await fetch(`/api/orgs/${org.parentOrgId}`);
+        const parentResponse = await fetch(`${API_BASE}/api/orgs/${org.parentOrgId}`);
         const parentData = await parentResponse.json();
         parentOrgName = parentData.name;
       }
@@ -109,7 +110,7 @@ const UsersList: React.FC = () => {
         return;
       }
 
-      const response = await fetch('/api/users', {
+      const response = await fetch(`${API_BASE}/api/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +128,7 @@ const UsersList: React.FC = () => {
       // After fetching users, fetch the unique organization names
       if (data.length > 0) {
         const uniqueOrgIds = [...new Set(data.map(user => user.orgId))];
-        const orgDetailsPromises = uniqueOrgIds.map(id => fetch(`/api/orgs/${id}`).then(res => res.json()));
+        const orgDetailsPromises = uniqueOrgIds.map(id => fetch(`${API_BASE}/api/orgs/${id}`).then(res => res.json()));
         const orgDetails = await Promise.all(orgDetailsPromises);
         const newOrgNameMap = orgDetails.reduce((acc, org) => {
           acc[org.orgId] = org.name;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE } from '../utils/api';
 import {
   Box,
   TextField,
@@ -62,7 +63,7 @@ const AuditTrailSearch: React.FC = () => {
     setIsLoading(true);
     setHasSearched(true);
     try {
-      const response = await fetch('/api/audit/search', {
+      const response = await fetch(`${API_BASE}/api/audit/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

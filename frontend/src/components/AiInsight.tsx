@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Typography, Box, CircularProgress, Card, CardContent, CardHeader } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'; // AI icon
+import { API_BASE } from '../utils/api';
 
 interface AiInsightProps {
   orgId: string;
@@ -16,7 +17,7 @@ export default function AiInsight({ orgId }: AiInsightProps) {
       setLoading(true);
       setError(null);
       setInsight(null);
-      fetch(`/api/orgs/${orgId}/insight`)
+      fetch(`${API_BASE}/api/orgs/${orgId}/insight`)
         .then((res) => {
           if (!res.ok) {
             throw new Error('Failed to fetch insights');

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Typography, Box, Card, CardContent, CardHeader, List, ListItem, ListItemIcon, ListItemText, CircularProgress } from '@mui/material';
 import InsightsIcon from '@mui/icons-material/Insights'; // Other insights icon
+import { API_BASE } from '../utils/api';
 
 interface OtherInsightsProps {
   orgId: string;
@@ -16,7 +17,7 @@ export default function OtherInsights({ orgId }: OtherInsightsProps) {
       setLoading(true);
       setError(null);
       setOtherInsights([]);
-      fetch(`/api/orgs/${orgId}/insight`)
+      fetch(`${API_BASE}/api/orgs/${orgId}/insight`)
         .then((res) => {
           if (!res.ok) {
             throw new Error('Failed to fetch other insights');

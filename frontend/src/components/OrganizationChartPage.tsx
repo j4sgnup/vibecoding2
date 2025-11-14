@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Tree, TreeNode } from 'react-organizational-chart';
+import { API_BASE } from '../utils/api';
 
 interface User {
   _id: string;
@@ -32,7 +33,7 @@ const OrganizationChartPage: React.FC = () => {
     const fetchOrgStructure = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/orgs/${orgId}/structure`);
+        const response = await fetch(`${API_BASE}/api/orgs/${orgId}/structure`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

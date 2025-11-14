@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Select, MenuItem, Button, FormControl, InputLabel, CircularProgress, Snackbar, Alert } from '@mui/material';
+import { API_BASE } from '../utils/api';
 
 // Define the structure of an Organization
 interface Organization {
@@ -31,7 +32,7 @@ const SimulationPage: React.FC = () => {
   useEffect(() => {
     const fetchOrgs = async () => {
       try {
-        const response = await fetch('/api/orgs');
+        const response = await fetch(`${API_BASE}/api/orgs`);
         const data = await response.json();
         setOrganizations(data);
       } catch (error) {
@@ -52,7 +53,7 @@ const SimulationPage: React.FC = () => {
     }
     setIsSimulating(true);
     try {
-      const response = await fetch('/api/simulate/event', {
+      const response = await fetch(`${API_BASE}/api/simulate/event`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

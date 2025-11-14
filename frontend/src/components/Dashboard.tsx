@@ -8,6 +8,7 @@ import Grid from '@mui/material/Grid';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccountTreeIcon from '@mui/icons-material/AccountTree'; // Import the new icon
 import { Link as RouterLink } from 'react-router-dom'; // Import Link from react-router-dom
+import { API_BASE } from '../utils/api';
 
 interface Org {
   _id: string;
@@ -28,7 +29,7 @@ export default function Dashboard() {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    fetch('/api/orgs')
+    fetch(`${API_BASE}/api/orgs`)
       .then((res) => res.json())
       .then((data: Org[]) => {
         const parentOrgs = data.filter(org => org.type === 'parent');
